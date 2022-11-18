@@ -4,3 +4,7 @@
         padding-bottom: 0.5rem !important;
     }
 }
+
+.table thead th {
+    border-bottom: 0 !important; 
+}

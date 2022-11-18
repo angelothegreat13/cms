@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('home_pages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
+            $table->string('website_link');
             $table->string('title');
-            $table->string('image')->nullable();
-            $table->longtext('body');
+            $table->string('banner');
+            $table->longtext('content');
             $table->timestamps();
         });
     }

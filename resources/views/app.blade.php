@@ -9,6 +9,7 @@
                 @yield('content')
             </div>
         </div>
+        @include('layouts._logout-modal')
         @include('layouts._footer')
     </div>
 </div>

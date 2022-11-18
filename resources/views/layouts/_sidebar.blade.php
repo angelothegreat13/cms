@@ -11,14 +11,18 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
     
-    <li class="nav-item">
-        <a class="nav-link" href="#">
+    <li class="nav-item {{ Route::current()->getName() == 'dashboard' ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
+    <li class="nav-item {{ 
+        Route::current()->getName() == 'home-pages.index' || 
+        Route::current()->getName() == 'home-pages.create' ||
+        Route::current()->getName() == 'home-pages.edit' ? 'active' : ''
+    }}">
+        <a class="nav-link" href="{{ route('home-pages.index') }}">
             <i class="fas fa-home"></i>
             <span>Home Pages</span>
         </a>
