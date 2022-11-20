@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class HomePageController extends Controller
 {
-
     public function index()
     {
         $homePages = HomePage::latest()->get();
@@ -23,12 +22,14 @@ class HomePageController extends Controller
 
     protected static function validateHomePage()
     {
-        return Validator::make(request()->all(), [
+        $validated = Validator::make(request()->all(), [
             'title' => ['required'],
             'website_link' => ['required'],
             'content' => ['required'],
             'banner' => ['required','image','mimes:jpg,png,jpeg,gif,svg','max:2048']
         ]);
+
+        return $validated;
     }
 
     public function store(Request $request)
@@ -36,7 +37,7 @@ class HomePageController extends Controller
         $validation = self::validateHomePage();
 
         if ($validation->fails()) {
-            return $this->respondError('Validation Errors.', ['errors' => $validation->errors()], 400);
+            return $this->respondError('Validation Errors.', ['errors' => $validation->errors()], 401);
         }
 
         $imageName = time().'.'.$request->banner->extension();
@@ -53,14 +54,20 @@ class HomePageController extends Controller
         return response()->json(['success' => true]);
     }   
 
-    public function edit()
+    public function edit(HomePage $homePage)
     {
-
+        return view('home-pages.edit', compact('homePage'));
     }
 
-    public function update()
+    public function update(HomePage $homePage, Request $request)
     {
+        $validation = self::validateHomePage();
 
+        if ($validation->fails()) {
+            return $this->respondError('Validation Errors.', ['errors' => $validation->errors()], 401);
+        }
+
+        return response()->json(['success' => true]);
     }
 
     public function destroy()

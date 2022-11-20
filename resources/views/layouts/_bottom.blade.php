@@ -1,4 +1,5 @@
     
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('sb-admin/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('sb-admin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>

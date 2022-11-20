@@ -10,14 +10,11 @@
 </div>
 <div class="card shadow mb-4">
 	<div class="card-body">
-        <form id="homePageForm" method="POST" action="{{ route('home-pages.store') }}" enctype="multipart/form-data">
+        <form id="homePageForm">
         	@csrf
         	<div class="form-group">
         		<label for="title">Title</label>
 		        <input type="text" name="title" id="title" class="form-control" placeholder="Enter page title..." value={{ old('title') }}>
-		        @error('title')  
-		            <div class="invalid-feedback font-italic mt-1">{{ $message }}</div>
-		        @enderror
         	</div>
 		    <div class="form-group row">
                 <div class="col-sm-6 mb-3 mb-sm-0">
@@ -36,7 +33,7 @@
             </div>
             <div class="form-group">
             	<label for="title">Content</label>
-            	<div id="emailContent"></div>
+            	<div id="webContent" class="content"></div>
 	        </div>
 	        <div class="text-right">
 	        	<a href="{{ route('home-pages.index') }}" class="btn btn-secondary mr-1">Back to Home Page</a>
@@ -48,32 +45,14 @@
 @endsection
 @section('script')
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
-<script>
+<script src="{{ asset('js/home-page-content.js') }}"></script>
+<script type="text/javascript">
 const storeHomePageURL = {!! json_encode(route('home-pages.store')) !!};
-
-$(document).ready(function() {
-	$('#emailContent').summernote({
-		placeholder: 'Enter content here...',
-		tabsize: 2,
-		height: 350,
-		toolbar: [
-			[ 'style', [ 'style' ] ],
-            [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
-            [ 'fontname', [ 'fontname' ] ],
-            [ 'fontsize', [ 'fontsize' ] ],
-            [ 'color', [ 'color' ] ],
-            [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
-            [ 'table', [ 'table' ] ],
-            [ 'insert', [ 'link'] ],
-            [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview', 'help' ] ]
-		]
-	});
-});
 
 $('#homePageForm').submit(function(e) {
     e.preventDefault();    
     let formData = new FormData(this);
-    formData.append('content', $('#emailContent').summernote('code'));
+    formData.append('content', $('#webContent').summernote('code'));
 
     $.ajax({
         url: storeHomePageURL,

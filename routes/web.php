@@ -14,8 +14,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/',[HomePageController::class, 'index'])->name('index');
         Route::get('/create',[HomePageController::class, 'create'])->name('create');
         Route::post('/store',[HomePageController::class, 'store'])->name('store');
-        Route::get('/{homePage}/edit',[HomePageController::class, 'create'])->name('edit');
-        Route::patch('/{homePage}',[HomePageController::class, 'update'])->name('update');
+        Route::get('/{homePage}/edit',[HomePageController::class, 'edit'])->name('edit');
+        Route::patch('/{homePage}/',[HomePageController::class, 'update'])->name('update');
         Route::delete('/{homePage}',[HomePageController::class, 'destroy'])->name('delete');
     });
 
