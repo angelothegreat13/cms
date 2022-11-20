@@ -11,7 +11,9 @@ class HomePageController extends Controller
 {
     public function show($id)
     {
-        $homePage = HomePage::find($id);
+        $homePage = HomePage::where('id',$id)
+            ->where('user_id', auth()->user()->id)
+            ->first();
 
         if (is_null($homePage)) {
             return $this->respondError('Home Page not found.', [], 404);

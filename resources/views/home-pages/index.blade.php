@@ -39,7 +39,9 @@
 	                        <td>
 	                        	<a href="{{ route('home-pages.edit', $homePage->id) }}" class="btn btn-success mr-1"><i class="fas fa-edit"></i></a>
 	                        	<form method="POST" class="d-inline" action="{{ route('home-pages.delete', $homePage->id) }}">
-	                        		<button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+	                        		@csrf
+	                        		@method('DELETE')
+	                        		<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');"><i class="fas fa-trash"></i></button>
 	                        	</form>
 	                        </td>
 	                    </tr>

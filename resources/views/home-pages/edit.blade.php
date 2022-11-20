@@ -25,9 +25,8 @@
 		    		<label for="banner">Banner</label>
                     <div class="input-group">
 						<div class="custom-file">
-							<img src="{{ asset($homePage->banner) }}" width="65px" height="65px" />
 						    <input type="file" class="custom-file-input" name="banner" id="banner">
-						    <label class="custom-file-label" for="banner">Choose file</label>
+						    <label class="custom-file-label" for="banner">{{ asset($homePage->banner) }}</label>
 						</div>
 					</div>
                 </div>
@@ -50,6 +49,16 @@
 <script type="text/javascript">
 const updateHomePageURL = {!! json_encode(route('home-pages.update', $homePage->id)) !!};
 
+document.querySelector('#banner').addEventListener('change', function(e) {
+    let file = this.files[0];
+    let reader = new FileReader;
+	reader.onload = function() {
+    	// document.querySelector('#preview').src = this.result;
+    	$(".custom-file-label").text(file.name);
+    };
+    reader.readAsDataURL(file);
+}, false);
+
 $('#homePageForm').submit(function(e) {
     e.preventDefault();    
     let formData = new FormData(this);
@@ -66,7 +75,7 @@ $('#homePageForm').submit(function(e) {
         success: function (res) 
         {
         	if (res.success) {
-        		console.log(res);
+        		window.location.href = {!! json_encode(route('home-pages.index')) !!};
         	} else {
         		alert('Something went wrong!');
         	}
@@ -76,7 +85,7 @@ $('#homePageForm').submit(function(e) {
         	$('#validation-errors').removeClass('d-none');
         	$('#validation-errors').html('');
 		   	$.each(errors, function(key,value) {
-		    	$('#validation-errors').append('<li>'+value+'</li');
+		    	$('#validation-errors').append('<li>'+ value +'</li');
 		 	}); 
         }
     });

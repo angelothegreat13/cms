@@ -10,7 +10,9 @@ class HomePageController extends Controller
 {
     public function index()
     {
-        $homePages = HomePage::latest()->get();
+        $homePages = HomePage::where('user_id',auth()->user()->id)
+            ->latest()
+            ->get();
 
         return view('home-pages.index',compact('homePages'));
     }
@@ -22,14 +24,18 @@ class HomePageController extends Controller
 
     protected static function validateHomePage()
     {
-        $validated = Validator::make(request()->all(), [
+        $rules = [
             'title' => ['required'],
             'website_link' => ['required'],
             'content' => ['required'],
             'banner' => ['required','image','mimes:jpg,png,jpeg,gif,svg','max:2048']
-        ]);
+        ];
 
-        return $validated;
+        if (request()->isMethod('PATCH')) {
+            $rules['banner'] = ['nullable','image','mimes:jpg,png,jpeg,gif,svg','max:2048'];
+        }
+
+        return Validator::make(request()->all(), $rules);
     }
 
     public function store(Request $request)
@@ -62,16 +68,29 @@ class HomePageController extends Controller
     public function update(HomePage $homePage, Request $request)
     {
         $validation = self::validateHomePage();
+        $validatedData = $validation->valid();
 
         if ($validation->fails()) {
             return $this->respondError('Validation Errors.', ['errors' => $validation->errors()], 401);
         }
 
+        if ($request->hasFile('banner')) {
+            $imageName = time().'.'.$request->banner->extension();
+            $request->banner->move(public_path('images'), $imageName);
+            $validatedData['banner'] = asset('images').'/'.$imageName;
+        }
+
+        $homePage->update($validatedData);
+
+        session()->flash('message', 'Home Page successfully updated.'); 
+
         return response()->json(['success' => true]);
     }
 
-    public function destroy()
+    public function destroy(Homepage $homePage)
     {
+        $homePage->delete();
 
+        return back()->with('message','Home Page deleted successfully.');
     }
 }
